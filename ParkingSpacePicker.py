@@ -24,13 +24,13 @@ def mouseClick(events,x,y,flags,params):
         pickle.dump(posList,f)
 
 #비디오 사용시 주석헤제
-# cap = cv2.VideoCapture('cctv27.mp4')
+#cap = cv2.VideoCapture('Anyang2_SKV1_cctv22.mp4')
 img_width, img_heiht=720,480 #변환하고자 하는 비디오 크기
 while True:
     #이미지
     img = cv2.imread('388.png')
-    #비디오
-    # success, img = cap.read()
+    #비디오 사용시 주석헤제
+    #success, img = cap.read()
     img = cv2.resize(img, dsize=(img_width, img_heiht))  # 이미지 사이즈 변환
     for pos in posList:
         cv2.rectangle(img,pos,(pos[0]+width,pos[1]+height),(255,0,255),1)
