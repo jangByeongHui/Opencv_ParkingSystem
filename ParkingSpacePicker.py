@@ -31,10 +31,18 @@ while True:
     img = cv2.imread('388.png')
     #비디오 사용시 주석헤제
     #success, img = cap.read()
-    img = cv2.resize(img, dsize=(img_width, img_heiht))  # 이미지 사이즈 변환
+    #img = cv2.resize(img, dsize=(img_width, img_heiht))  # 이미지 사이즈 변환
+
+    imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
+    imgThreshold = cv2.adaptiveThreshold(imgBlur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 25, 16)
+
     for pos in posList:
         cv2.rectangle(img,pos,(pos[0]+width,pos[1]+height),(255,0,255),1)
+        cv2.rectangle(imgThreshold, pos, (pos[0] + width, pos[1] + height), (255, 0, 255), 1)
 
     cv2.imshow("image",img)
+    cv2.imshow("imgThreshold", imgThreshold)
     cv2.setMouseCallback("image",mouseClick)
+    cv2.setMouseCallback("imgThreshold", mouseClick)
     cv2.waitKey(1)
