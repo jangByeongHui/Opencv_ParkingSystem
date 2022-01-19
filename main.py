@@ -1,7 +1,6 @@
 import cv2
 import pickle
 
-import cv2.cv2
 import cvzone
 import numpy as np
 
