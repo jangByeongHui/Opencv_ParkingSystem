@@ -1,16 +1,15 @@
 import cv2
 import pickle
 
-import cv2.cv2
 import cvzone
 import numpy as np
 
 #Video feed
-cap = cv2.VideoCapture('cctv27.mp4')
+cap = cv2.VideoCapture('Anyang2_SKV1_cctv22.mp4')
 with open('CarParkPos','rb') as f:
     posList = pickle.load(f)
 
-width ,height =12,12
+width ,height =100,100
 img_width,img_heiht = 720,480
 
 def checkParkingSpace(imgPro):
@@ -27,7 +26,7 @@ def checkParkingSpace(imgPro):
         #검출 되는 픽셀 수에 따라 영역 색상 표시 변경
 
         #차량 주차면 주차
-        if count < 50:
+        if count < 500:
             color=(0,255,0)
             thickness=1
             spaceCounter += 1
@@ -50,7 +49,7 @@ while True:
 
     imgGray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray,(3,3),1)
-    imgThreshold = cv2.adaptiveThreshold(imgBlur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV,25,16)
+    imgThreshold = cv2.adaptiveThreshold(imgBlur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV,19,17)
 
 
     imgMedian = cv2.medianBlur(imgThreshold,5)
