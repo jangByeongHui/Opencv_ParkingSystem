@@ -63,7 +63,7 @@ def adjustGreyWeight(pos):
 
 def adjustBlockSize(pos):
    global block_size
-   block_size=pos*2
+   block_size=pos*2+1
 
 #비디오 사용시 주석헤제
 #cap = cv2.VideoCapture('Anyang2_SKV1_cctv22.mp4') # <---------- 비디오 첨부
