@@ -7,12 +7,12 @@ width , height = 10, 10
 block_size=3
 grey_weight=0 # Threshold 감도
 isDragging=False
+x0,y0,w,h = -1,-1,-1,-1
 try:
     with open('CarParkPos','rb') as f:
         posList=pickle.load(f)
 except:
     posList=[]
-    ß
 def onMouse(event,x,y,flags,param):     # 마우스 이벤트 핸들 함수  ---①
     global isDragging, x0, y0, img      # 전역변수 참조
     if event == cv2.EVENT_LBUTTONDOWN:  # 왼쪽 마우스 버튼 다운, 드래그 시작 ---②
