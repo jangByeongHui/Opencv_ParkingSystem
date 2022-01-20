@@ -9,19 +9,18 @@ cap = cv2.VideoCapture('Anyang2_SKV1_cctv22.mp4')
 with open('CarParkPos','rb') as f:
     posList = pickle.load(f)
 
-width ,height =100,100
 img_width,img_heiht = 720,480
 
 def checkParkingSpace(imgPro):
     spaceCounter = 0
 
     for pos in posList:
-        x,y =pos
-        imgCrop = imgPro[y:y+height,x:x+width]
+        x,y ,w,h=pos
+        imgCrop = imgPro[y:y+h,x:x+w]
         cv2.imshow("imgCrroped{}{}".format(x,y),imgCrop) #우리가 확인하는 영역에 부분만 view
 
         count =cv2.countNonZero(imgCrop) #특정 영역에 보이는 0이 아닌 픽셀 수
-        cvzone.putTextRect(img, str(count), (x, y + height - 5), scale=0.5, thickness=1, offset=0) #검출 되는 픽셀 수 표시
+        cvzone.putTextRect(img, str(count), (x, y + h - 5), scale=0.5, thickness=1, offset=0) #검출 되는 픽셀 수 표시
 
         #검출 되는 픽셀 수에 따라 영역 색상 표시 변경
 
@@ -35,7 +34,7 @@ def checkParkingSpace(imgPro):
             color=(0,0,255)
             thickness = 1
 
-        cv2.rectangle(img, pos, (pos[0] + width, pos[1] + height), color, thickness)
+        cv2.rectangle(img, pos, (pos[0] + w, pos[1] + h), color, thickness)
 
     cvzone.putTextRect(img,"FULL:{}".format(spaceCounter),(50,25),scale=0.5,thickness=1,offset=15,colorR=(0,255,0)) # 빈공간 표시
 
