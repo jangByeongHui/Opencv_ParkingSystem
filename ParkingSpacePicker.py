@@ -1,7 +1,8 @@
 #Opencv만을 활용한 주차장내에 차량 주차여부 확인 시스템
 import cv2
 import pickle
-
+import numpy as np
+import cvzone
 
 width , height = 10, 10
 block_size=3
@@ -60,14 +61,17 @@ def img_Contrast(img): # -----Converting image to LAB Color model---------------
 def adjustGreyWeight(pos):
    global grey_weight
    grey_weight=pos
+   print("grey_weight:{}".format(grey_weight))
 
 def adjustBlockSize(pos):
    global block_size
    block_size=pos*2+1
+   print("block_size:{}".format(block_size))
+
 
 #비디오 사용시 주석헤제
-#cap = cv2.VideoCapture('Anyang2_SKV1_cctv22.mp4') # <---------- 비디오 첨부
-img_width, img_heiht=720,480 #변환하고자 하는 비디오 크기
+cap = cv2.VideoCapture('Anyang2_SKV1_cctv20.mp4') # <---------- 비디오 첨부
+img_width, img_heiht=1280,720 #변환하고자 하는 비디오 크기
 
 cv2.namedWindow('imgThreshold')
 cv2.createTrackbar('grey_weight', 'imgThreshold', 0, 30, adjustGreyWeight)
@@ -76,11 +80,16 @@ cv2.createTrackbar('blocksize', 'imgThreshold', 3, 15, adjustBlockSize)
 
 while True:
     #이미지
-    img = cv2.imread('388.png') # <------------------ 이미지 첨부
+    #img = cv2.imread('CCTV20.jpg') # <------------------ 이미지 첨부
 
     #비디오 사용시 주석헤제
-    #success, img = cap.read()
-    # img = cv2.resize(img, dsize=(img_width, img_heiht))  # 이미지 사이즈 변환
+    success, img = cap.read()
+    if success:
+        img = cv2.resize(img, dsize=(img_width, img_heiht))  # 이미지 사이즈 변환
+    else:
+        cap = cv2.VideoCapture('Anyang2_SKV1_cctv20.mp4')
+        continue
+
 
     #img=img_Contrast(img) #색상 강조
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #그레이 스케일로 변환
@@ -89,8 +98,16 @@ while True:
 
     for pos in posList:
         x, y, w, h =pos
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,255),1)
-        cv2.rectangle(imgThreshold, (x,y), (x+ w, y + h), (255, 0, 255), 1)
+        imgCrop = imgThreshold[y:y + h, x:x + w]
+        imgMedian = cv2.medianBlur(imgCrop, 5)
+        kernel = np.ones((3, 3), np.int8)
+
+        imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
+        cv2.imshow("test",imgDilate)
+        count = cv2.countNonZero(imgDilate)  # 특정 영역에 보이는 0이 아닌 픽셀 수
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 1)
+        cv2.rectangle(imgThreshold, (x, y), (x + w, y + h), (255, 0, 255), 1)
+        cvzone.putTextRect(img, str(count), (x, y + h - 5), scale=0.5, thickness=1, offset=0)  # 검출 되는 픽셀 수 표시
 
     cv2.getTrackbarPos('grey_weight', 'imgThreshold')
     cv2.getTrackbarPos('blocksize', 'imgThreshold')
@@ -100,7 +117,9 @@ while True:
     cv2.setMouseCallback("image",onMouse)
     cv2.setMouseCallback("imgThreshold", onMouse)
 
-    end_key=cv2.waitKey(1)
+
+
+    end_key=cv2.waitKey(0)
     if end_key == 27:
         print(posList)
         break
