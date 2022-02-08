@@ -12,7 +12,7 @@
 
 <img src="https://github.com/jangByeongHui/Opencv_ParkingSystem/blob/main/img/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202022-01-18%20%EC%98%A4%EC%A0%84%2010.55.36.png?raw=true">
 
-## main,py
+## main.py
 
 ParkingSpacePicker를 통해서 저장한 좌표 값들을 이용하여 해당 영역들의 픽셀을 잡고 설정한 픽셀 수 만큼 검출하게 되면 색상이 변화하여 차량이 주차중이거나 빈 주차면인 상황을 표시한다.
 
